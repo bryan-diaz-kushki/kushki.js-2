@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Implementando Kushki.js 2</title>
+    <script src="https://cdn-uat.kushkipagos.com/js/0.1.3-14195-alpha.1/kushki.min.js"></script>
+    <script src="https://cdn-uat.kushkipagos.com/js/0.1.3-14195-alpha.1/card.min.js"></script>
+</head>
+
+<body>
+
+    <div>
+        <div id="cardHolderName_id"></div>
+        <div id="cardNumber_id"></div>
+        <div id="expirationDate_id"></div>
+        <div id="cvv_id"></div>
+        <div id="deferred_id"></div>
+
+        <button onclick="onRequestToken()">
+            Pagar
+        </button>
+    </div>
+
+    <script>
+        const kushkiOptions = {
+            publicCredentialId: "publicCredentialId",
+            inTest: true
+        };
+
+        const options = {
+            fields: {
+                cardholderName: {
+                    fieldType: "cardholderName",
+                    inputType: "text",
+                    label: "Card holder name",
+                    placeholder: "Card holder name",
+                    selector: "cardHolderName_id",
+                },
+                cardNumber: {
+                    fieldType: "cardNumber",
+                    inputType: "number",
+                    label: "Card Number",
+                    maxLength: 22,
+                    placeholder: "XXXX-XXXX-XXXX-XXXX",
+                    selector: "cardNumber_id",
+                },
+                cvv: {
+                    fieldType: "cvv",
+                    inputType: "password",
+                    label: "CVV",
+                    placeholder: "XXX-X",
+                    selector: "cvv_id",
+                },
+                deferred: {
+                    fieldType: "deferred",
+                    inputType: "text",
+                    label: "Diferido",
+                    placeholder: "Deferred",
+                    selector: "deferred_id",
+                },
+                expirationDate: {
+                    fieldType: "expirationDate",
+                    inputType: "text",
+                    label: "Expiration date",
+                    placeholder: "MM / YY",
+                    selector: "expirationDate_id",
+                }
+            },
+            currency: "COP",
+            amount: {
+                iva: 1,
+                subtotalIva0: 10,
+                subtotalIva: 10,
+
+            }
+        };
+
+        init(kushkiOptions).then(kushkiInstance => {
+            initCardToken(kushkiInstance, options).then(ICard => {
+                cardInstance = ICard
+            })
+
+        })
+
+        const onRequestToken = () => {
+            let tokenResponse
+            cardInstance.requestToken().then(tokenResponse => {
+                alert(tokenResponse.token)
+            }).catch(e => {
+                alert(e.message)
+            })
+        }
+    </script>
+
+</body>
+
+</html>
